@@ -1,5 +1,5 @@
 import Image from 'next/image'
-
+import "antd/dist/antd.css";
 
 export default function Home() {
   return (
