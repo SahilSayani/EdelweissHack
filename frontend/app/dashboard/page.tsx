@@ -8,10 +8,10 @@
 //   );
 // }
 "use client"
-
 import React from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import TabsComp from '@/components/tabs/Tabs';
 
 function Dashboard(){
   interface DataType {
@@ -99,7 +99,10 @@ function Dashboard(){
   }
   
 return (
+  <>
+  <TabsComp />
   <Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 300 }} pagination={false} />
+  </>
   );
 }
 
