@@ -8,7 +8,7 @@ import Navbar from './Navbar'
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
-      <body className={`${inter.className} bg-slate-800 text-slate-100`}>
+      <body className={`${inter.className} `}>
         <Navbar />
         {children}
       </body>
