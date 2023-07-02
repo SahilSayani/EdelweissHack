@@ -1,10 +1,9 @@
 const express = require("express");
 
-// const tourRouter = require("./routes/tourRoutes");
+const dataRouter = require("./routes/dataRoutes");
 
 const app = express();
 
-// 3) ROUTES
-// app.use('/api/v1/tours', tourRouter);
+app.use("/api", dataRouter);
 
 module.exports = app;
