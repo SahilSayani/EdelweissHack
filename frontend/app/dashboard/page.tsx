@@ -11,7 +11,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import TabsComp from '@/components/tabs/Tabs';
+import TabsComp from '@/components/Tabs';
 import "antd/dist/antd.css";
 
 function Dashboard(){
