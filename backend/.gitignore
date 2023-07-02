@@ -27,3 +27,6 @@ yarn-error.log*
 # local env files
 .env*
 
+dataset.csv
+feed-play-1.0.jar
+output.txt
