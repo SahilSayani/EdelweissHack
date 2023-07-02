@@ -3,10 +3,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../public/logo.svg'
 import { useState } from "react";
-
+import Menu from '@/components/Menu';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [menu, setMenu] = useState(false);
   
   return (
     <header className='sticky top-0 w-full bg-green-50 py-4 shadow-sm z-20'>
@@ -45,8 +45,8 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <div className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? (
+          <div className="md:hidden" onClick={() => setMenu(!menu)}>
+            {menu ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -78,7 +78,7 @@ const Navbar = () => {
           </div>
         </div>
     </nav>
-    
+    <Menu menu={menu} />
     </header>
   )
 }

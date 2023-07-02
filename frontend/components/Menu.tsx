@@ -10,19 +10,17 @@ export default function Menu({ menu }: Props) {
     {
       title: "Home",
       active: true,
+      route:"/"
     },
     {
-      title: "Why OptionWISE",
+      title: "OptionWISE Dashboard",
+      route:"/Dashboard"
     },
     {
-      title: "How It Works",
+      title: "Contact",
+      route:"/"
     },
-    {
-      title: "Performance",
-    },
-    { title: "Dashboard" },
-    { title: "Login" },
-    { title: "Sign Up" },
+  
   ];
   return (
     <AnimatePresence>
@@ -38,8 +36,8 @@ export default function Menu({ menu }: Props) {
               menus.map((item, i) => (
                 <li
                   className={`${
-                    item?.active ? "text-blue-600" : "text-gray-600"
-                  } py-4 transition hover:text-blue-500 `}
+                    item?.active ? "text-green-800" : "text-green-800"
+                  } py-4 transition hover:text-green-500 `}
                   key={i}
                 >
                   {item?.title}
