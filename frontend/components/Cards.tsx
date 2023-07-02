@@ -6,21 +6,21 @@ const dm = DM_Sans({ subsets: ["latin"], weight: "700" });
 export default function Cards() {
   const content = [
     {
-      thumbnail: "frontend/public/ExampleUpdate.svg",
+      thumbnail: "/ExampleUpdate.svg",
       title: "Get Better Returns",
       description:
         "Access OptionWISE's high-performing fund allocations created by our financial experts. Choose from Conservative and Aggressive options to suit your investing goals.",
       cta: "Sign Up Free",
     },
     {
-      thumbnail: "../public/MarketAnalysis.svg",
+      thumbnail: "/MarketAnalysis.svg",
       title: "Understand the Market",
       description:
         "Know what’s impacting your retirement in under 10 minutes a week with our easy-to-read market summaries – and how to adjust fund percentages accordingly.",
       cta: "How It Works",
     },
     {
-      thumbnail: "../public/AnnualizedReturns.svg",
+      thumbnail: "/AnnualizedReturns.svg",
       title: "Sleep Better at Night",
       description:
         "Rest assured knowing that OptionWISE has performed exceptionally well since our 2020 inception, withstanding the test of time through both bull and bear markets.",

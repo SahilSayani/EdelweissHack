@@ -9,14 +9,14 @@ export default function Hero() {
       "OptionWISE makes it simple to manage your F&O with our professional Charts and expert market analysis. Join today to get access.",
     hero_image: {
       alt: "Hero Image",
-      path: "../public/next.svg"
+      path: "/portfolio.svg"
     },
     cta: "Get Started",
   };
   return (
     <>
       <section className="flex w-full bg-white">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-8 py-8 md:grid-cols-2 ">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-10 py-8 md:grid-cols-2 ">
           {/* Left Content */}
           <div className="flex flex-col justify-center space-y-8">
             <h1
