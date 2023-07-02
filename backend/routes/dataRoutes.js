@@ -7,5 +7,6 @@ router.get("/get", dataController.getAllData);
 router.post("/post", dataController.create);
 router.get("/get/symbol/:symbol", dataController.getSymbol);
 router.get("/get/time/:time", dataController.getTime);
+router.delete("/delete/:id", dataController.deleteData);
 
 module.exports = router;
