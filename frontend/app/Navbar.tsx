@@ -6,7 +6,7 @@ import { useState } from "react";
 
 
 const Navbar = () => {
-  const [menu, setMenu] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   
   return (
     <header className='sticky top-0 w-full bg-green-50 py-4 shadow-sm z-20'>
@@ -45,8 +45,8 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <div className="md:hidden" onClick={() => setMenu(!menu)}>
-            {menu ? (
+          <div className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -78,6 +78,7 @@ const Navbar = () => {
           </div>
         </div>
     </nav>
+    
     </header>
   )
 }
