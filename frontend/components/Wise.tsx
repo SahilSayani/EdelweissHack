@@ -2,8 +2,8 @@ import React from "react";
 import { DM_Sans } from "next/font/google";
 const dm = DM_Sans({ subsets: ["latin"], weight: "700" });
 
-export default function Tsp() {
-  const tsp_content = {
+export default function Wise() {
+  const content = {
     title: "Get wise with OptionWISE",
     list: [
       {
@@ -21,13 +21,13 @@ export default function Tsp() {
     <section className="w-full bg-white py-24 sm:py-32">
       <div className="mx-auto flex max-w-5xl flex-col space-y-16 px-8 sm:space-y-24">
         <h2
-          className={`${dm.className} text-center text-5xl font-bold text-dark-blue`}
+          className={`${dm.className} text-center text-5xl font-bold `}
         >
-          {tsp_content?.title}
+          {content?.title}
         </h2>
         <ul className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {tsp_content?.list &&
-            tsp_content.list.map((item, i) => (
+          {content?.list &&
+            content.list.map((item, i) => (
               <li
                 className="flex flex-col items-center justify-center space-y-3 sm:items-start sm:space-y-6"
                 key={i}

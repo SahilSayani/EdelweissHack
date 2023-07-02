@@ -51,7 +51,7 @@ export default function Hero() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-4 px-8 lg:flex-row">
           <Image
             alt="Trophy"
-            src="/public/assets/trophy-icon.svg"
+            src="/trophy-icon.svg"
             height={48}
             width={48}
           />
