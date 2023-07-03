@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Space, Table, Tag } from "antd";
+import { Dropdown, MenuProps, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import Btn from "./components/Btn";
 import { data } from "./components/Linechart";
+import { DownOutlined } from "@ant-design/icons";
+
 function App() {
   const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [counter, setCounter] = useState<number>(0);
   const [stockLTP, setStockLTP] = useState<number>(0);
+  const [index, setIndex] = useState<string>("MAINIDX");
   let dataForTable;
 
   interface DataType {
@@ -47,7 +50,7 @@ function App() {
 
   useEffect(() => {
     handleGetData();
-  }, []);
+  }, [index]);
 
   let strikePrice = 0;
   let strikePriceArray: any = [];
@@ -55,10 +58,10 @@ function App() {
   const handleGetData = async () => {
     setLoading(true);
     const response = await fetch(
-      "http://localhost:4000/api/get?symbol=MAINIDX"
+      `http://localhost:4000/api/get?symbol=${index}`
     );
     const res = await response.json();
-    console.log(res.data);
+    console.log(res.data.length, "res.data.length");
 
     res.data.map((item: any) => {
       console.log(item.timestamp);
@@ -75,7 +78,7 @@ function App() {
         (a: any, b: any) =>
           parseFloat(a.strikePrice) - parseFloat(b.strikePrice)
       )
-      .filter((item: any) => item.symbol == "MAINIDX")
+      // .filter((item: any) => item.symbol == "MAINIDX")
       .map((item: any) => {
         if (item.optionType === null) {
           console.log(item.LTP / 100, "item.LTP");
@@ -142,9 +145,9 @@ function App() {
   useEffect(() => {
     dataForTable = data;
     setData(dataForTable);
-  }, [counter]);
+  }, [counter, index]);
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {}, [data, index]);
 
   const callColumns: ColumnsType<DataType> = [
     {
@@ -475,10 +478,52 @@ function App() {
     },
   ];
 
+  const onClick: MenuProps["onClick"] = ({ key }) => {};
+
+  const items: MenuProps["items"] = [
+    {
+      label: "MAINIDX",
+      key: "1",
+      onClick: () => {
+        setIndex("MAINIDX");
+      },
+    },
+    {
+      label: "FINANCIALS",
+      key: "2",
+      onClick: () => {
+        setData([]);
+        setIndex("FINANCIALS");
+      },
+    },
+    {
+      label: "ALLBANKS",
+      key: "3",
+      onClick: () => {
+        setData([]);
+        setIndex("ALLBANKS");
+      },
+    },
+    {
+      label: "MIDCAPS",
+      key: "4",
+      onClick: () => {
+        setData([]);
+        setIndex("MIDCAPS");
+      },
+    },
+  ];
+
   return (
     <>
-      <Btn />
+      {/* <Btn /> */}
       <div className="table-parent">
+        <Dropdown menu={{ items, onClick }}>
+          <Space>
+            {index}
+            <DownOutlined />
+          </Space>
+        </Dropdown>
         <div className="table-header">
           <div>
             <span>Calls</span>
