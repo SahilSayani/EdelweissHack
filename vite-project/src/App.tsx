@@ -164,10 +164,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#3c4556" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -181,10 +181,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -198,10 +198,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -216,10 +216,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -234,10 +234,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -252,10 +252,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -269,10 +269,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -286,10 +286,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -306,7 +306,7 @@ function App() {
                 stockLTP > record.strikePrice ? "transparent" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -320,10 +320,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -337,10 +337,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -354,10 +354,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -371,10 +371,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -388,10 +388,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -405,10 +405,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -422,10 +422,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -439,10 +439,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -456,10 +456,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
@@ -473,10 +473,10 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP < record.strikePrice ? "#15417e" : "transparent",
             },
           },
-          children: <div>{text}</div>,
+          children: <>{text}</>,
         };
       },
     },
