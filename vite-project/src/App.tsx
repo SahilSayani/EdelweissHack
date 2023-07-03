@@ -4,7 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-
+import Btn from "./components/Btn";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -111,6 +111,7 @@ function App() {
 
   return (
     <>
+    <Btn />
       <div className="table-parent">
         <div className="table-header">
           <div>
@@ -127,6 +128,7 @@ function App() {
           className="table"
         />
       </div>
+      
     </>
   );
 }
