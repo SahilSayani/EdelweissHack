@@ -565,6 +565,7 @@ function App() {
     theme={{
       algorithm: theme.darkAlgorithm,
     }}
+    
   >
       {/* <Btn /> */}
       <div className="table-parent">
