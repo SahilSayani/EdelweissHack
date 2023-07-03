@@ -12,6 +12,7 @@ function App() {
   const [counter, setCounter] = useState<number>(0);
   const [stockLTP, setStockLTP] = useState<number>(0);
   const [index, setIndex] = useState<string>("MAINIDX");
+  const [ep, setEp] = useState<string>("6JUL23");
   let dataForTable;
 
   interface DataType {
@@ -50,21 +51,23 @@ function App() {
 
   useEffect(() => {
     handleGetData();
-  }, [index]);
+  }, [index, ep]);
 
   let strikePrice = 0;
   let strikePriceArray: any = [];
 
   const handleGetData = async () => {
+    setData([]);
     setLoading(true);
     const response = await fetch(
-      `http://localhost:4000/api/get?symbol=${index}`
+      `http://localhost:4000/api/get?symbol=${index}&expiryDate=${ep}`
     );
     const res = await response.json();
     console.log(res.data.length, "res.data.length");
 
     res.data.map((item: any) => {
-      console.log(item.timestamp);
+      // console.log(item.timestamp);
+      console.log(item.expiryDate);
     });
 
     res.data.map((item: any) => {
@@ -145,9 +148,9 @@ function App() {
   useEffect(() => {
     dataForTable = data;
     setData(dataForTable);
-  }, [counter, index]);
+  }, [counter, index, ep]);
 
-  useEffect(() => {}, [data, index]);
+  useEffect(() => {}, [data, index, ep]);
 
   const callColumns: ColumnsType<DataType> = [
     {
@@ -478,8 +481,6 @@ function App() {
     },
   ];
 
-  const onClick: MenuProps["onClick"] = ({ key }) => {};
-
   const items: MenuProps["items"] = [
     {
       label: "MAINIDX",
@@ -514,13 +515,62 @@ function App() {
     },
   ];
 
+  const expdates: MenuProps["items"] = [
+    {
+      label: "6JUL23",
+      key: "1",
+      onClick: () => {
+        setData([]);
+        setEp("6JUL23");
+      },
+    },
+    {
+      label: "27JUL23",
+      key: "2",
+      onClick: () => {
+        setData([]);
+        setEp("27JUL23");
+      },
+    },
+    {
+      label: "31AUG23",
+      key: "3",
+      onClick: () => {
+        setData([]);
+        setEp("31AUG23");
+      },
+    },
+    {
+      label: "28SEP23",
+      key: "4",
+      onClick: () => {
+        setData([]);
+        setEp("28SEP23");
+      },
+    },
+    {
+      label: "26OCT23",
+      key: "4",
+      onClick: () => {
+        setData([]);
+        setEp("26OCT23");
+      },
+    },
+  ];
+
   return (
     <>
       {/* <Btn /> */}
       <div className="table-parent">
-        <Dropdown menu={{ items, onClick }}>
+        <Dropdown menu={{ items }}>
           <Space>
             {index}
+            <DownOutlined />
+          </Space>
+        </Dropdown>
+        <Dropdown menu={{ items: expdates }}>
+          <Space>
+            {ep}
             <DownOutlined />
           </Space>
         </Dropdown>
