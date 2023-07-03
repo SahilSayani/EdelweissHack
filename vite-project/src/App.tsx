@@ -4,8 +4,8 @@ import { Dropdown, MenuProps, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { ConfigProvider, theme } from 'antd';
 import Btn from "./components/Btn";
-import { data } from "./components/Linechart";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, LineChartOutlined } from "@ant-design/icons";
+import { Line } from "react-chartjs-2";
 
 function App() {
   const [data, setData] = useState<DataType[]>([]);
@@ -13,7 +13,7 @@ function App() {
   const [counter, setCounter] = useState<number>(0);
   const [stockLTP, setStockLTP] = useState<number>(0);
   const [index, setIndex] = useState<string>("MAINIDX");
-  const [ep, setEp] = useState<string>("6JUL23");
+  const [ep, setEp] = useState<string>("27JUL23");
   let dataForTable;
 
   interface DataType {
@@ -64,7 +64,7 @@ function App() {
       `http://localhost:4000/api/get?symbol=${index}&expiryDate=${ep}`
     );
     const res = await response.json();
-    console.log(res.data.length, "res.data.length");
+    console.log(res.data, "res.data.length");
 
     res.data.map((item: any) => {
       // console.log(item.timestamp);
@@ -154,6 +154,30 @@ function App() {
   useEffect(() => {}, [data, index, ep]);
 
   const callColumns: ColumnsType<DataType> = [
+    {
+      title: "",
+      dataIndex: "",
+      key: "",
+      align: "center",
+      render(text, record) {
+        return {
+          props: {
+            style: {
+              background:
+                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+            },
+          },
+          children: (
+            <Btn
+              strikePrice={record.strikePrice}
+              symbol={record.symbol}
+              optionType="CE"
+              expiryDate={record.expiryDate}
+            />
+          ),
+        };
+      },
+    },
     {
       title: "OI",
       dataIndex: "openInterest",
@@ -477,6 +501,30 @@ function App() {
             },
           },
           children: <>{text}</>,
+        };
+      },
+    },
+    {
+      title: "",
+      dataIndex: "",
+      key: "",
+      align: "center",
+      render(text, record) {
+        return {
+          props: {
+            style: {
+              background:
+                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+            },
+          },
+          children: (
+            <Btn
+              strikePrice={record.putStrikePrice}
+              symbol={record.symbol}
+              optionType="PE"
+              expiryDate={record.putExpireDate}
+            />
+          ),
         };
       },
     },
