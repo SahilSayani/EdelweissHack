@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Dropdown, MenuProps, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { ConfigProvider, theme } from 'antd';
 import Btn from "./components/Btn";
 import { data } from "./components/Linechart";
 import { DownOutlined } from "@ant-design/icons";
@@ -560,6 +561,11 @@ function App() {
 
   return (
     <>
+    <ConfigProvider
+    theme={{
+      algorithm: theme.darkAlgorithm,
+    }}
+  >
       {/* <Btn /> */}
       <div className="table-parent">
         <Dropdown menu={{ items }}>
@@ -593,6 +599,7 @@ function App() {
           />
         </div>
       </div>
+      </ConfigProvider>
     </>
   );
 }
