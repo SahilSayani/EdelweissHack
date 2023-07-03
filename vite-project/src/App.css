@@ -24,7 +24,14 @@
 }
 
 .table {
-  width: 90vw;
+  width: 48vw;
   height: 90vh;
   border-radius: 0 !important;
+}
+
+.two-tables {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }

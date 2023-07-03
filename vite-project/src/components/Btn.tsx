@@ -24,6 +24,7 @@ const Btn: React.FC = () => {
         </Button>
       </Space>
       <Drawer
+      closeIcon={false}
         title={`${size} Market Chart`}
         placement="right"
         size={size}
