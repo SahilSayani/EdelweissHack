@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Drawer, Space } from 'antd';
 import type { DrawerProps } from 'antd/es/drawer';
+import {Linechart} from "./Linechart" ;
 
-const App: React.FC = () => {
+const Btn: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [size, setSize] = useState<DrawerProps['size']>();
 
@@ -37,10 +38,10 @@ const App: React.FC = () => {
           </Space>
         }
       >
-        <h1>CHART HERE</h1>
+        <Linechart />
       </Drawer>
     </>
   );
 };
 
-export default App;
+export default Btn;
