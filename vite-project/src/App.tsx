@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Dropdown, MenuProps, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { ConfigProvider, theme } from 'antd';
+import { ConfigProvider, theme } from "antd";
 import Btn from "./components/Btn";
 import { DownOutlined, LineChartOutlined } from "@ant-design/icons";
 import { Line } from "react-chartjs-2";
@@ -609,45 +609,45 @@ function App() {
 
   return (
     <>
-    <ConfigProvider
-    theme={{
-      algorithm: theme.darkAlgorithm,
-    }}
+      <ConfigProvider
+        theme={{
+          algorithm: theme.darkAlgorithm,
+        }}
     
-  >
-      {/* <Btn /> */}
-      <div className="table-parent">
-        <Dropdown menu={{ items }}>
-          <Space>
-            {index}
-            <DownOutlined />
-          </Space>
-        </Dropdown>
-        <Dropdown menu={{ items: expdates }}>
-          <Space>
-            {ep}
-            <DownOutlined />
-          </Space>
-        </Dropdown>
-        <div className="table-header">
-          <div>
-            <span>Calls</span>
+      >
+        {/* <Btn /> */}
+        <div className="table-parent">
+          <Dropdown menu={{ items }}>
+            <Space>
+              {index}
+              <DownOutlined />
+            </Space>
+          </Dropdown>
+          <Dropdown menu={{ items: expdates }}>
+            <Space>
+              {ep}
+              <DownOutlined />
+            </Space>
+          </Dropdown>
+          <div className="table-header">
+            <div>
+              <span>Calls</span>
+            </div>
+            <div>
+              <span>Puts</span>
+            </div>
           </div>
-          <div>
-            <span>Puts</span>
+          <div className="two-tables">
+            <Table
+              columns={callColumns}
+              loading={loading}
+              dataSource={[...data]}
+              className="table"
+              scroll={{ x: 1500, y: 500 }}
+              // pagination={false}
+            />
           </div>
         </div>
-        <div className="two-tables">
-          <Table
-            columns={callColumns}
-            loading={loading}
-            dataSource={[...data]}
-            className="table"
-            scroll={{ x: 1500, y: 500 }}
-            // pagination={false}
-          />
-        </div>
-      </div>
       </ConfigProvider>
     </>
   );
