@@ -1,8 +1,8 @@
-import math from "mathjs";
+import { exp, erf } from "mathjs";
 import getDayDifference from "./ttm.ts";
 
 function norm_cdf(x: number) {
-  return 0.5 * (1 + math.erf(x / Math.sqrt(2)));
+  return 0.5 * (1 + erf(x / Math.sqrt(2)));
 }
 
 function call_price(
@@ -25,7 +25,7 @@ function put_price(
   d1: number,
   d2: number
 ) {
-  const C = norm_cdf(-d2) * K * Math.exp(-r * t) - norm_cdf(-d1) * S;
+  const C = norm_cdf(-d2) * K * exp(-r * t) - norm_cdf(-d1) * S;
   return C;
 }
 
@@ -36,6 +36,7 @@ export function implied_volatility(
   C0: number,
   type: string | undefined
 ) {
+  console.log(S, K, t, C0, type, "implied_volatility");
   let r = 0.05;
   let epsilon = 1.0;
   let abstol = 1e-4;
@@ -65,16 +66,10 @@ export function implied_volatility(
   return vol * 100;
 }
 
-const StockPrice = 19322.55;
-const StrikePice = 19500.0;
-const timeToMaturity = getDayDifference("12AUG23") / 365;
-const LTP = 17.0;
+// const StockPrice = 19322.55;
+// const StrikePice = 19500.0;
+// const timeToMaturity = getDayDifference("12AUG23") / 365;
+// const LTP = 17.0;
 
-const impliedVolatility = implied_volatility(
-  StockPrice,
-  StrikePice,
-  timeToMaturity,
-  LTP,
-  "CE"
-);
-console.log("Implied volatility = ", impliedVolatility);
+// const impliedVolatility = implied_volatility(S, K, t, C0, type);
+// console.log("Implied volatility = ", impliedVolatility);

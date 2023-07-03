@@ -6,6 +6,8 @@ import { ConfigProvider, theme } from "antd";
 import Btn from "./components/Btn";
 import { DownOutlined, LineChartOutlined } from "@ant-design/icons";
 import { Line } from "react-chartjs-2";
+import { implied_volatility } from "./utils/test";
+import getDayDifference from "./utils/ttm";
 
 function App() {
   const [data, setData] = useState<DataType[]>([]);
@@ -52,7 +54,7 @@ function App() {
 
   useEffect(() => {
     handleGetData();
-  }, [index, ep]);
+  }, [index, ep, stockLTP]);
 
   let strikePrice = 0;
   let strikePriceArray: any = [];
@@ -77,18 +79,18 @@ function App() {
 
     strikePriceArray = [...new Set(strikePriceArray)];
 
-    res.data
-      .sort(
-        (a: any, b: any) =>
-          parseFloat(a.strikePrice) - parseFloat(b.strikePrice)
-      )
-      // .filter((item: any) => item.symbol == "MAINIDX")
-      .map((item: any) => {
-        if (item.optionType === null) {
-          console.log(item.LTP / 100, "item.LTP");
-          setStockLTP(item.LTP / 100);
-        }
-      });
+    // res.data
+    //   .sort(
+    //     (a: any, b: any) =>
+    //       parseFloat(a.strikePrice) - parseFloat(b.strikePrice)
+    //   )
+    //   // .filter((item: any) => item.symbol == "MAINIDX")
+    //   .map((item: any) => {
+    //     if (item.optionType === null) {
+    //       console.log(item.LTP / 100, "item.LTP");
+    //       setStockLTP(item.LTP / 100);
+    //     }
+    //   });
 
     strikePriceArray.map((item: any) => {
       let dataObj: any = {};
@@ -98,7 +100,20 @@ function App() {
             parseFloat(a.strikePrice) - parseFloat(b.strikePrice)
         )
         .map((item2: any) => {
+          if (item2.strikePrice == null) {
+            console.log(item2, "item2");
+            console.log(item2.LTP / 100, "item.LTP");
+            setStockLTP(item2.LTP / 100);
+          }
           if (item2.strikePrice === item && item2.optionType === "CE") {
+            const iv = implied_volatility(
+              parseFloat(stockLTP.toString()),
+              parseFloat(item2.strikePrice.toString()),
+              getDayDifference(item2.expiryDate),
+              parseFloat(item2.LTP.toString()),
+              item2.optionType
+            );
+            console.log(iv, "iv");
             dataObj = {
               key: Math.random(),
               symbol: item2.symbol,
@@ -117,9 +132,19 @@ function App() {
               sequence: item2.sequence,
               prevClosePrice: item2.prevClosePrice,
               prevOpenInterest: item2.prevOpenInterest,
+              iv: iv,
             };
           }
           if (item2.strikePrice === item && item2.optionType === "PE") {
+            console.log(stockLTP, "stockLTP");
+            const iv = implied_volatility(
+              stockLTP,
+              item2.strikePrice,
+              getDayDifference(item2.expiryDate),
+              item2.LTP,
+              item2.optionType
+            );
+            console.log(iv, "iv");
             dataObj = {
               ...dataObj,
               putExpireDate: item2.expiryDate,
@@ -136,6 +161,7 @@ function App() {
               putSequence: item2.sequence,
               putPrevClosePrice: item2.prevClosePrice,
               putPrevOpenInterest: item2.prevOpenInterest,
+              iv: iv,
             };
             data.push(dataObj);
           }
@@ -241,6 +267,23 @@ function App() {
             style: {
               background:
                 stockLTP > record.strikePrice ? "#202838" : "transparent",
+            },
+          },
+          children: <>{text}</>,
+        };
+      },
+    },
+    {
+      title: "IV",
+      dataIndex: "iv",
+      key: "iv",
+      align: "center",
+      render(text, record) {
+        return {
+          props: {
+            style: {
+              background:
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -613,7 +656,6 @@ function App() {
         theme={{
           algorithm: theme.darkAlgorithm,
         }}
-    
       >
         {/* <Btn /> */}
         <div className="table-parent">
