@@ -6,7 +6,6 @@ const Data = new Schema({
   expiryDate: { type: String },
   strikePrice: { type: Number },
   optionType: { type: String, default: null },
-  intrinsticValue: { type: String, defaul: null },
   IV: { type: Number },
   LTP: { type: Number, required: true },
   LTQ: { type: Number, required: true },

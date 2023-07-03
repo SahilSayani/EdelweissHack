@@ -38,6 +38,10 @@ exports.filterData = (data) => {
 
         result.push(obj);
     });
+    var date = new Date();
+    date.setUTCHours(date.getUTCHours()+5);
+    date.setUTCMinutes(date.getUTCMinutes() + 30);
+    console.log(result[0]["timestamp"]);
     for (obj of result) {
         for (j of months) {
             let pos = obj["symbol"].indexOf(j);
@@ -49,9 +53,9 @@ exports.filterData = (data) => {
                 obj["optionType"] = symbol.slice(symbol.length - 2);
             }
         }
-        obj["timestamp"] = Date.now();
+        obj["timestamp"] = date;
     }
-    //console.log(result);
+    //dataController.deleteData();
     //dataController.create(result);
 };
 
