@@ -164,7 +164,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#3c4556" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -181,7 +181,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#15417e" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -198,7 +198,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#15417e" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -216,7 +216,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#15417e" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -234,7 +234,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#15417e" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -252,7 +252,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#15417e" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -269,7 +269,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#15417e" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -286,7 +286,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#15417e" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -320,7 +320,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -337,7 +337,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -354,7 +354,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -371,7 +371,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -388,7 +388,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -405,7 +405,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -422,7 +422,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -439,7 +439,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -456,7 +456,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -473,7 +473,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#15417e" : "transparent",
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
