@@ -1,4 +1,5 @@
 const dataController = require("./controller/dataController");
+const moment = require("moment");
 
 const months = [
     "JAN",
@@ -38,10 +39,9 @@ exports.filterData = (data) => {
 
         result.push(obj);
     });
-    var date = new Date();
-    date.setUTCHours(date.getUTCHours()+5);
-    date.setUTCMinutes(date.getUTCMinutes() + 30);
-    console.log(result[0]["timestamp"]);
+    var date = result[0]["timestamp"];
+    const uniqueArray = [];
+    const uniqueSet = new Set();
     for (obj of result) {
         for (j of months) {
             let pos = obj["symbol"].indexOf(j);
@@ -55,7 +55,17 @@ exports.filterData = (data) => {
         }
         obj["timestamp"] = date;
     }
+    // const da = Array.from(uniqueSet);
+    // var momentDate = moment(da[0], "ddd MMM DD HH:mm:ss z YYYY");
+    // var isoString = momentDate.toISOString();
+    // var daate = new Date(isoString);
+    // daate.setUTCHours(daate.getUTCHours() + 5);
+    // daate.setUTCMinutes(daate.getUTCMinutes() + 30);
+    // console.log(isoString);
+    // console.log(uniqueSet, result.length, daate);
+    // for (obj of result) {
+    //     obj['timestamp']= daate;
+    // }
     //dataController.deleteData();
     //dataController.create(result);
 };
-

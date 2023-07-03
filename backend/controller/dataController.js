@@ -62,15 +62,17 @@ exports.getAllData = async (req, res) => {
     try {
         const { symbol, expiryDate } = req.query;
         const { timestamp } = await getLatestTimeStamp();
+        console.log(timestamp);
         let data = await Data.find({
             symbol: symbol,
-            timestamp: timestamp,
         });
-        if (expiryDate) {
+        console.log(data[0],timestamp);
+        if (symbol) {
             data = data.filter((obj) => {
-                return obj.expiryDate == expiryDate;
+                return obj.timestamp == timestamp;
             });
         }
+        console.log(data.length);
         return res.status(200).json({
             status: "success",
             data,
@@ -106,10 +108,10 @@ exports.getByDate = async (req, res) => {
 
 exports.create = async (packetData) => {
     try {
-        console.log(packetData);
+        console.log(packetData[0], 'testing');
         await updateLatestTimeStamp({ timestamp: packetData[0].timestamp });
-        await addAllDates(packetData[0].timestamp);
-        //await Data.insertMany(packetData);
+        //await addAllDates(packetData[0].timestamp);
+        await Data.insertMany(packetData);
         return;
     } catch (err) {
         console.log(err);
