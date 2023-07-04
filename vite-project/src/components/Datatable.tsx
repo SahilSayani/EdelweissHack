@@ -21,7 +21,7 @@ function Datatable() {
   const [ep, setEp] = useState<string>("default");
   const [expDateMap, setExpDateMap] = useState<any>([]);
   const [expDateArray, setExpDateArray] = useState<any>([]);
-  const [expdates, setExpdates]= useState<MenuProps["items"]>([]);
+  const [expdates, setExpdates]= useState<any>([]);
 
   let dataForTable;
 
@@ -58,8 +58,8 @@ function Datatable() {
     putPrevClosePrice: number;
     putPrevOpenInterest: number;
   }
-  let strikePrice = 0;
-  let strikePriceArray: any = [];
+  // let strikePrice = 0;
+  // let strikePriceArray: any = [];
 
   const handleGetData = async () => {
     setData([]);
@@ -194,7 +194,7 @@ function Datatable() {
   useEffect(()=>{
     console.log(index, expdates);
     if(expdates && expdates.length){
-      setEp(expdates[0]);
+      setEp(expdates[0] as string);
     }
   },[expdates]);
 
