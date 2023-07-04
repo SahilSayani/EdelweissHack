@@ -1,19 +1,42 @@
 *{
-  color:#a3c6f6;
-  background-color: #111a2c; 
-  font-size: small;
+  /* font-size: small; */
 }
 
 .data-table{
 margin: 2%;
 /* background: rgba( 255, 255, 255, 0.25 ); */
-box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.5 );
+box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.40);
 backdrop-filter: blur( 5px );
 -webkit-backdrop-filter: blur( 5px );
-border-radius: 3%;
 /* border: 1px solid rgba( 255, 255, 255, 0.18 ); */
 height:90vh;
 width:95vw;
+}
+.sp-data{
+  position:absolute;
+  z-index: 30;
+  width :5%;
+  left : 10%;
+  display:flex;
+  font-weight: bold;
+  font-family: "arial";
+  padding:1%;
+}
+.sp-data-box{
+  margin:0 6% 0 6%;
+}
+.logo{
+  position:absolute;
+  z-index: 30;
+  width :5%;
+  left : 3%;
+}
+
+.bg{
+  position: absolute;
+  width: 120vw;
+  top: -90%;
+  left: -10%;
 }
 
 .table-parent {

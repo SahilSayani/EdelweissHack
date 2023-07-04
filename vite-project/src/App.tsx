@@ -9,10 +9,13 @@ import { ConfigProvider, MenuProps, theme } from 'antd'
 // import { implied_volatility } from './utils/test'
 // import getDayDifference from './utils/ttm'
 import Datatable from './components/Datatable'
-import { implied_volatility } from './utils/test';
-import getDayDifference from './utils/ttm';
-import { ColumnsType } from 'antd/es/table';
-import Btn from './components/Btn';
+import { implied_volatility } from './utils/test'
+import getDayDifference from './utils/ttm'
+import { ColumnsType } from 'antd/es/table'
+import Btn from './components/Btn'
+import optionlogo from './assets/optionwiselogo.png'
+import bg from './assets/bg.svg'
+import bg2 from './assets/bg2.svg'
 
 function App() {
   // const [data, setData] = useState<DataType[]>([]);
@@ -206,7 +209,7 @@ function App() {
   //         }
   //       });
   //     data.push(dataObj);
-      
+
   //   });
   //   setData(data);
   //   setLoading(false);
@@ -667,13 +670,19 @@ function App() {
       <ConfigProvider
         theme={
           {
-            algorithm: theme.darkAlgorithm,
+            // algorithm: theme.darkAlgorithm,
           }
         }
       >
         {/* <Btn /> */}
-        <div className="data-table">
-        <Datatable />
+        <img src={optionlogo} alt='' className='logo' />
+        <img src={bg2} alt='' className='bg' />
+        <div className='sp-data'>
+          <div className='sp-data-box'> P1 = value</div>
+          <div className='sp-data-box'> P2 = value</div>
+        </div>
+        <div className='data-table'>
+          <Datatable />
         </div>
       </ConfigProvider>
     </>
