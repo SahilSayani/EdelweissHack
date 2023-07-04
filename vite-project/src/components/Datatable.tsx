@@ -8,7 +8,11 @@ import { Line } from "react-chartjs-2";
 import { implied_volatility } from "../utils/test";
 import getDayDifference from "../utils/ttm";
 import { retinaScale } from "chart.js/helpers";
+<<<<<<< HEAD
 import './../App.css'
+=======
+import { useExpDateStore } from "../store/store";
+>>>>>>> 40fa375 (feat: filters now work)
 
 function Datatable() {
   const [data, setData] = useState<DataType[]>([]);
@@ -23,9 +27,15 @@ function Datatable() {
   const [ep, setEp] = useState<string>("default");
   const [expDateMap, setExpDateMap] = useState<any>([]);
   const [expDateArray, setExpDateArray] = useState<any>([]);
+<<<<<<< HEAD
   const [expdates, setExpdates]= useState<any>([]);
   const [stockName, setStockName]=useState<any>('');
   const [stockPrice, setStockPrice]=useState<any>(0);
+=======
+  const [expdates, setExpdates] = useState<any>([]);
+  const expDate = useExpDateStore((state: any) => state.expDate);
+  const setExpDate = useExpDateStore((state: any) => state.setExpDate);
+>>>>>>> 40fa375 (feat: filters now work)
 
   let dataForTable;
 
@@ -67,21 +77,52 @@ function Datatable() {
   const handleGetData = async () => {
     setData([]);
     setLoading(true);
-    const response = await fetch(`http://localhost:4000/api/get?symbol=${index}`);
+    const response = await fetch(
+      `http://localhost:4000/api/get?symbol=${index}`
+    );
     const res = await response.json();
     setData(res.data);
-    const tmpExpDate: Array<string>=[];
-    res.data.forEach((val: any)=>{
-      if(!tmpExpDate.includes(val.expiryDate) && val.expiryDate){
+    let tmpExpDate: Array<string> = [];
+    res.data.forEach((val: any) => {
+      if (!tmpExpDate.includes(val.expiryDate) && val.expiryDate) {
         tmpExpDate.push(val.expiryDate);
       }
-      if(!val.strikePrice){
+
+      if (!val.strikePrice) {
         setStockLTP(val.LTP);
         setStockPrice(val.LTP);
         setStockName(val.symbol);
       }
     });
-    res.data= res.data.filter((val: any) => {
+
+    res.data.map((item: any) => {
+      expDateArray.push(item.expiryDate);
+    });
+
+    let tempExpArray = [...new Set(expDateArray)];
+    //console.log(tempExpArray, "tempExpArray");
+    const newTemp = tempExpArray.filter((item: any) => {
+      return item !== undefined;
+    });
+
+    setExpDateArray(newTemp);
+
+    let tempExpMap: any = [];
+    newTemp.map((item: any) => {
+      let tempObj: any = {};
+      tempObj = {
+        label: item,
+        value: item,
+        onClick: () => {
+          setData([]);
+          setEp(item);
+        },
+      };
+      tempExpMap.push(tempObj);
+    });
+    setExpDateMap(tempExpMap);
+
+    res.data = res.data.filter((val: any) => {
       if (val.optionType !== "XX") {
         return false;
       }
@@ -89,61 +130,90 @@ function Datatable() {
     });
     res.data.shift();
     setExpDateMap(tmpExpDate);
+    setExpDate(tmpExpDate);
+    console.log(expDateMap, "mapp");
     setLoading(false);
   };
-  useEffect(()=>{
-    console.log(stockLTP, 'testLTP');
-  },[stockLTP])
+
+  let eItems: MenuProps["items"] = [];
+
   useEffect(() => {
-    const arr = data.filter((val)=>{
-      if(val.expiryDate==ep){
+    data.forEach((val: any) => {
+      if (!expDate.includes(val.expiryDate) && val.expiryDate) {
+        expDate.push(val.expiryDate);
+      }
+
+      if (!val.strikePrice) {
+        setStockLTP(val.LTP);
+      }
+    });
+    const data1 = data.filter((val: any) => {
+      if (val.optionType !== "XX") {
+        return false;
+      }
+      return true;
+    });
+    data1.shift();
+    setFilteredData(data1);
+  }, [expDate]);
+
+  useEffect(() => {
+    console.log(stockLTP, "testLTP");
+  }, [stockLTP]);
+  useEffect(() => {
+    const arr = data.filter((val) => {
+      if (val.expiryDate == ep) {
         return val;
       }
-    })
+    });
     setFilteredData(arr);
     setData(arr);
-    }, [ep]);
+  }, [ep]);
 
   useEffect(() => {
     handleGetData();
-    setEp('default');
+    setEp("default");
   }, [index]);
 
-  useEffect(()=>{
-    let prevST=-1;
-    let rowObj ={};
-    const rows=[];
-    data.forEach(val=>{
-      if(val.strikePrice!=prevST && Object.keys(rowObj).length){
-          rows.push(rowObj);
-          rowObj={};
-          prevST=val.strikePrice;
+  useEffect(() => {
+    let prevST = -1;
+    let rowObj = {};
+    const rows = [];
+    data.forEach((val) => {
+      if (val.strikePrice != prevST && Object.keys(rowObj).length) {
+        rows.push(rowObj);
+        rowObj = {};
+        prevST = val.strikePrice;
       }
-      if(val.optionType=='PE'){
-        let IV: number= parseFloat(implied_volatility(
-          parseFloat(stockLTP.toString()),
-          parseFloat(val.strikePrice.toString()),
-          getDayDifference(val.expiryDate),
-          parseFloat(val.LTP.toString()),
-          val.optionType
-        ).toFixed(2));
-        if(IV>100){
-          IV=-1;
+      if (val.optionType == "PE") {
+        let IV: number = parseFloat(
+          implied_volatility(
+            parseFloat(stockLTP.toString()),
+            parseFloat(val.strikePrice.toString()),
+            getDayDifference(val.expiryDate),
+            parseFloat(val.LTP.toString()),
+            val.optionType
+          ).toFixed(2)
+        );
+        if (IV > 100) {
+          IV = -1;
         }
-        rowObj={
+        rowObj = {
           ...rowObj,
           symbol: val.symbol,
           key: Math.random(),
           strikePrice: val.strikePrice,
           expireDate: val.expiryDate,
-          putLTP: val.LTP/100,
+          putLTP: val.LTP / 100,
           putLTQ: val.LTQ,
-          putIv : IV<0?'-':IV,
-          putChng: (val.LTP-val.prevClosePrice)/100,
-          putchangeopenInterest: val.openInterest-val.prevOpenInterest,
-          putTotalTradedVolume: val.totalTradedVolume?val.totalTradedVolume: 0,
-          putBestBid: val.bestBid/100,
-          putBestAsk: val.bestAsk/100,
+          putIv: IV < 0 ? "-" : IV,
+          putChng: (val.LTP - val.prevClosePrice) / 100,
+          putchangeopenInterest: val.openInterest - val.prevOpenInterest,
+          putTotalTradedVolume: val.totalTradedVolume
+            ? val.totalTradedVolume
+            : 0,
+          putBestBid: val.bestBid / 100,
+          putBestAsk: val.bestAsk / 100,
           putBestBidQty: val.bestBidQty,
           putBestAskQty: val.bestAskQty,
           putOpenInterest: val.openInterest,
@@ -151,71 +221,72 @@ function Datatable() {
           putSequence: val.sequence,
           putPrevClosePrice: val.prevClosePrice,
           putPrevOpenInterest: val.prevOpenInterest,
+        };
+      } else if (val.optionType == "CE") {
+        let IV: number = parseFloat(
+          implied_volatility(
+            parseFloat(stockLTP.toString()),
+            parseFloat(val.strikePrice.toString()),
+            getDayDifference(val.expiryDate),
+            parseFloat(val.LTP.toString()),
+            val.optionType
+          ).toFixed(2)
+        );
+        if (IV > 100) {
+          IV = -1;
         }
-      }
-      else if(val.optionType=='CE'){
-        let IV: number= parseFloat(implied_volatility(
-          parseFloat(stockLTP.toString()),
-          parseFloat(val.strikePrice.toString()),
-          getDayDifference(val.expiryDate),
-          parseFloat(val.LTP.toString()),
-          val.optionType
-        ).toFixed(2));
-        if(IV>100){
-          IV=-1;
-        }
-        rowObj={
-            ...rowObj,
-            key: Math.random(),
-            symbol: val.symbol,
-            expiryDate: val.expiryDate,
-            strikePrice: val.strikePrice,
-            optionType: val.optionType,
-            LTP: val.LTP/100,
-            LTQ: val.LTQ,
-            iv : IV<0?'-':IV,
-            chng: (val.LTP-val.prevClosePrice)/100,
-            changeopenInterest: val.openInterest-val.prevOpenInterest,
-            totalTradedVolume: val.totalTradedVolume?val.totalTradedVolume: '0',
-            bestBid: val.bestBid/100,
-            bestAsk: val.bestAsk/100,
-            bestBidQty: val.bestBidQty,
-            bestAskQty: val.bestAskQty,
-            openInterest: val.openInterest,
-            timestamp: val.timestamp,
-            sequence: val.sequence,
-            prevClosePrice: val.prevClosePrice,
-            prevOpenInterest: val.prevOpenInterest,
-        }
+        rowObj = {
+          ...rowObj,
+          key: Math.random(),
+          symbol: val.symbol,
+          expiryDate: val.expiryDate,
+          strikePrice: val.strikePrice,
+          optionType: val.optionType,
+          LTP: val.LTP / 100,
+          LTQ: val.LTQ,
+          iv: IV < 0 ? "-" : IV,
+          chng: (val.LTP - val.prevClosePrice) / 100,
+          changeopenInterest: val.openInterest - val.prevOpenInterest,
+          totalTradedVolume: val.totalTradedVolume
+            ? val.totalTradedVolume
+            : "0",
+          bestBid: val.bestBid / 100,
+          bestAsk: val.bestAsk / 100,
+          bestBidQty: val.bestBidQty,
+          bestAskQty: val.bestAskQty,
+          openInterest: val.openInterest,
+          timestamp: val.timestamp,
+          sequence: val.sequence,
+          prevClosePrice: val.prevClosePrice,
+          prevOpenInterest: val.prevOpenInterest,
+        };
       }
     });
-    if(Object.keys(rowObj).length){
-          rows.push(rowObj);
-          rowObj={};
-      }
-      console.log(rows);
-      setFinalData([...rows])
-  },[filteredData])
+    if (Object.keys(rowObj).length) {
+      rows.push(rowObj);
+      rowObj = {};
+    }
+    console.log(rows);
+    setFinalData([...rows]);
+  }, [filteredData]);
   //setInterval(handleGetData, 30000);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(stockLTP);
-  },[stockLTP])
+  }, [stockLTP]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (expDateMap && expDateMap.length) {
-      const newExpdates = [
-        ...expDateMap,
-      ];
+      const newExpdates = [...expDateMap];
       setExpdates(newExpdates);
     }
-  },[expDateMap])
+  }, [expDateMap]);
 
-  useEffect(()=>{
-    if(expdates && expdates.length){
+  useEffect(() => {
+    if (expdates && expdates.length) {
       setEp(expdates[0] as string);
     }
-  },[expdates]);
+  }, [expdates]);
 
   const callColumns: ColumnsType<DataType> = [
     {
@@ -228,7 +299,7 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: (
@@ -252,10 +323,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -269,10 +340,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -286,10 +357,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -304,10 +375,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -321,10 +392,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -338,10 +409,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -356,10 +427,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -374,10 +445,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -391,10 +462,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -408,10 +479,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -429,7 +500,7 @@ function Datatable() {
               color: "white",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -443,10 +514,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -460,10 +531,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -477,10 +548,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -494,10 +565,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -511,10 +582,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -528,10 +599,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -545,10 +616,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -562,10 +633,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -579,10 +650,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -596,10 +667,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{!text?'-':text}</>,
+          children: <>{!text ? "-" : text}</>,
         };
       },
     },
@@ -613,7 +684,7 @@ function Datatable() {
           props: {
             style: {
               background:
-                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
+                stockLTP / 100 > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: (
@@ -621,13 +692,23 @@ function Datatable() {
               strikePrice={record.strikePrice}
               symbol={record.symbol}
               optionType="PE"
-              expiryDate={record.expireDate}
+              expiryDate={record.expiryDate}
             />
           ),
         };
       },
     },
   ];
+
+  const dateOptions: MenuProps["items"] = expDate.map((date: any) => {
+    return {
+      label: date,
+      key: date,
+      onClick: () => {
+        setEp(date);
+      },
+    };
+  });
 
   const items: MenuProps["items"] = [
     {
@@ -672,28 +753,28 @@ function Datatable() {
         </div>
       <ConfigProvider
         theme={{
-          algorithm: [theme.darkAlgorithm,theme.compactAlgorithm],
+          algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
         }}
       >
         {/* <Btn /> */}
         <div className="table-parent">
           <div className="dropdown-options">
-          <div className="dropdown-block">
-          <Dropdown menu={{ items }}>
-            <Space>
-              {index}
-              <DownOutlined />
-            </Space>
-          </Dropdown>
-          </div>
-          <div className="dropdown-block">
-          <Dropdown menu={{ items: expdates }}>
-            <Space>
-              {ep}
-              <DownOutlined />
-            </Space>
-          </Dropdown>
-          </div>
+            <div className="dropdown-block">
+              <Dropdown menu={{ items }}>
+                <Space>
+                  {index}
+                  <DownOutlined />
+                </Space>
+              </Dropdown>
+            </div>
+            <div className="dropdown-block">
+              <Dropdown menu={{ items: dateOptions }}>
+                <Space>
+                  {ep}
+                  <DownOutlined />
+                </Space>
+              </Dropdown>
+            </div>
           </div>
           <div className="table-header">
             <div>
