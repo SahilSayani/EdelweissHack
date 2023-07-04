@@ -687,6 +687,7 @@ function Datatable() {
               className="table"
               scroll={{ x: 1500, y: 500 }}
               pagination={false}
+              size="small"
             />
           </div>
         </div>
