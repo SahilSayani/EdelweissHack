@@ -67,6 +67,6 @@ exports.filterData = (data) => {
     // for (obj of result) {
     //     obj['timestamp']= daate;
     // }
-    //dataController.deleteData();
-    //dataController.create(result);
+    dataController.deleteData();
+    dataController.create(result);
 };

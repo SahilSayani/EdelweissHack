@@ -120,7 +120,7 @@ exports.create = async (packetData) => {
         console.log(packetData[0]);
         await updateLatestTimeStamp({ timestamp: packetData[0].timestamp });
         await addAllDates(packetData[0].timestamp);
-        //await Data.insertMany(packetData);
+        await Data.insertMany(packetData);
         return;
     } catch (err) {
         console.log(err);
