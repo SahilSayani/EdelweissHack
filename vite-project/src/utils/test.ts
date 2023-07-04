@@ -36,7 +36,12 @@ export function implied_volatility(
   C0: number,
   type: string | undefined
 ) {
-  //console.log(S, K, t, C0, type, "implied_volatility");
+  console.log(S, K, t, C0, type, "implied_volatility");
+  t/=365;
+  S/=100;
+  C0/=100;
+  console.log(S, K, t, C0, type, "implied_volatility");
+
   let r = 0.05;
   let epsilon = 1.0;
   let abstol = 1e-4;
@@ -63,6 +68,7 @@ export function implied_volatility(
     vol = -function_value / vega + vol;
     epsilon = Math.abs(function_value);
   }
+  console.log(vol);
   return vol * 100;
 }
 

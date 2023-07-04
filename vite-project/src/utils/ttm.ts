@@ -23,7 +23,7 @@ export default function getDayDifference(expiryDate: any) {
   const isoDateString = `${year}-${month}-${day}T${timeString}:00Z`;
   const date1 = new Date(isoDateString);
   const date2 = new Date(currentDate);
-  //console.log(date1, date2);
+  //console.log(expiryDate, date2);
   const dayStart = new Date(currentDate);
   dayStart.setUTCHours(9);
   dayStart.setUTCMinutes(15);
@@ -38,6 +38,7 @@ export default function getDayDifference(expiryDate: any) {
   if (date2 > dayEnd) todayDiff = 0;
   const timeDiff = date1.getTime() - date2.getTime();
   const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  //console.log(dayDiff + todayDiff)
   return dayDiff + todayDiff;
 }
 // const expiryDate = "12AUG23";

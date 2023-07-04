@@ -17,6 +17,7 @@ function Datatable() {
   const [loading, setLoading] = useState<boolean>(false);
   const [counter, setCounter] = useState<number>(0);
   const [stockLTP, setStockLTP] = useState<number>(0);
+  const [previousClose, prevClose] = useState<number>(0);
   const [index, setIndex] = useState<string>("MAINIDX");
   const [ep, setEp] = useState<string>("default");
   const [expDateMap, setExpDateMap] = useState<any>([]);
@@ -83,8 +84,6 @@ function Datatable() {
       return true;
     });
     res.data.shift();
-    console.log(res.data);
-    console.log(tmpExpDate.length);
     setExpDateMap(tmpExpDate);
     setLoading(false);
   };
@@ -97,7 +96,6 @@ function Datatable() {
         return val;
       }
     })
-    console.log(arr);
     setFilteredData(arr);
     setData(arr);
     }, [ep]);
@@ -118,16 +116,30 @@ function Datatable() {
           prevST=val.strikePrice;
       }
       if(val.optionType=='PE'){
+        let IV: number= parseFloat(implied_volatility(
+          parseFloat(stockLTP.toString()),
+          parseFloat(val.strikePrice.toString()),
+          getDayDifference(val.expiryDate),
+          parseFloat(val.LTP.toString()),
+          val.optionType
+        ).toFixed(2));
+        if(IV>100){
+          IV=-1;
+        }
         rowObj={
           ...rowObj,
+          symbol: val.symbol,
           key: Math.random(),
           strikePrice: val.strikePrice,
-          putExpireDate: val.expiryDate,
-          putLTP: val.LTP,
+          expireDate: val.expiryDate,
+          putLTP: val.LTP/100,
           putLTQ: val.LTQ,
-          putTotalTradedVolume: val.totalTradedVolume,
-          putBestBid: val.bestBid,
-          putBestAsk: val.bestAsk,
+          putIv : IV<0?'-':IV,
+          putChng: (val.LTP-val.prevClosePrice)/100,
+          putchangeopenInterest: val.openInterest-val.prevOpenInterest,
+          putTotalTradedVolume: val.totalTradedVolume?val.totalTradedVolume: 0,
+          putBestBid: val.bestBid/100,
+          putBestAsk: val.bestAsk/100,
           putBestBidQty: val.bestBidQty,
           putBestAskQty: val.bestAskQty,
           putOpenInterest: val.openInterest,
@@ -138,6 +150,16 @@ function Datatable() {
         }
       }
       else if(val.optionType=='CE'){
+        let IV: number= parseFloat(implied_volatility(
+          parseFloat(stockLTP.toString()),
+          parseFloat(val.strikePrice.toString()),
+          getDayDifference(val.expiryDate),
+          parseFloat(val.LTP.toString()),
+          val.optionType
+        ).toFixed(2));
+        if(IV>100){
+          IV=-1;
+        }
         rowObj={
             ...rowObj,
             key: Math.random(),
@@ -145,11 +167,14 @@ function Datatable() {
             expiryDate: val.expiryDate,
             strikePrice: val.strikePrice,
             optionType: val.optionType,
-            LTP: val.LTP,
+            LTP: val.LTP/100,
             LTQ: val.LTQ,
-            totalTradedVolume: val.totalTradedVolume,
-            bestBid: val.bestBid,
-            bestAsk: val.bestAsk,
+            iv : IV<0?'-':IV,
+            chng: (val.LTP-val.prevClosePrice)/100,
+            changeopenInterest: val.openInterest-val.prevOpenInterest,
+            totalTradedVolume: val.totalTradedVolume?val.totalTradedVolume: '0',
+            bestBid: val.bestBid/100,
+            bestAsk: val.bestAsk/100,
             bestBidQty: val.bestBidQty,
             bestAskQty: val.bestAskQty,
             openInterest: val.openInterest,
@@ -167,21 +192,12 @@ function Datatable() {
       console.log(rows);
       setFinalData([...rows])
   },[filteredData])
-
-  useEffect(()=>{
-    console.log(data, finalData, 'this');
-  },[finalData])
-  //setInterval(handleGetData, 5000);
-
-  useEffect(()=>{
-    console.log(expDateMap, 'expmp');
-  },[expDateMap]);
+  //setInterval(handleGetData, 30000);
 
   useEffect(()=>{
     console.log(stockLTP);
   },[stockLTP])
 
-  
   useEffect(()=>{
     if (expDateMap && expDateMap.length) {
       const newExpdates = [
@@ -192,7 +208,6 @@ function Datatable() {
   },[expDateMap])
 
   useEffect(()=>{
-    console.log(index, expdates);
     if(expdates && expdates.length){
       setEp(expdates[0] as string);
     }
@@ -209,7 +224,7 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: (
@@ -233,27 +248,27 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
     {
       title: "Change in OI",
-      dataIndex: "openInterest",
-      key: "openInterest",
+      dataIndex: "changeopenInterest",
+      key: "changeopenInterest",
       align: "center",
       render(text, record) {
         return {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -267,10 +282,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -285,10 +300,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -302,10 +317,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -319,10 +334,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -337,10 +352,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -355,10 +370,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -372,10 +387,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -389,10 +404,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -410,7 +425,7 @@ function Datatable() {
               color: "white",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -424,10 +439,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -441,10 +456,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -458,10 +473,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -475,10 +490,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -492,10 +507,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -509,27 +524,27 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
     {
       title: "IV",
-      dataIndex: "iv",
-      key: "iv",
+      dataIndex: "putIv",
+      key: "putIv",
       align: "center",
       render(text, record) {
         return {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -543,27 +558,27 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
     {
       title: "Change in OI",
-      dataIndex: "openInterest",
-      key: "openInterest",
+      dataIndex: "putchangeopenInterest",
+      key: "putchangeopenInterest",
       align: "center",
       render(text, record) {
         return {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -577,10 +592,10 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP < record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) < record.strikePrice ? "#202838" : "transparent",
             },
           },
-          children: <>{text}</>,
+          children: <>{!text?'-':text}</>,
         };
       },
     },
@@ -594,15 +609,15 @@ function Datatable() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#202838" : "transparent",
+                (stockLTP/100) > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: (
             <Btn
-              strikePrice={record.putStrikePrice}
+              strikePrice={record.strikePrice}
               symbol={record.symbol}
               optionType="PE"
-              expiryDate={record.putExpireDate}
+              expiryDate={record.expireDate}
             />
           ),
         };
