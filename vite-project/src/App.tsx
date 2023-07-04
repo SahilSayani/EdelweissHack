@@ -667,7 +667,7 @@ function App() {
       <ConfigProvider
         theme={
           {
-            algorithm: theme.darkAlgorithm,
+            // algorithm: theme.darkAlgorithm,
           }
         }
       >
