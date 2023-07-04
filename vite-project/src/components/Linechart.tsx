@@ -42,7 +42,7 @@ export function Linechart({
       },
       title: {
         display: true,
-        text: "Chart.js Line Chart",
+        text: "Market Chart",
       },
     },
   };

@@ -643,15 +643,15 @@ function Datatable() {
   ];
 
   const expdates: MenuProps["items"] = [
-    ...[
-      {
-        label: "ALL",
-        key: 0,
-        onClick: () => {
-          setEp("ALL");
-        },
-      },
-    ],
+    // ...[
+    //   {
+    //     label: "ALL",
+    //     key: 0,
+    //     onClick: () => {
+    //       setEp("ALL");
+    //     },
+    //   },
+    // ],
     ...expDateMap,
   ];
 
@@ -659,23 +659,29 @@ function Datatable() {
     <>
       <ConfigProvider
         theme={{
-          algorithm: theme.darkAlgorithm,
+          algorithm: [theme.darkAlgorithm,theme.compactAlgorithm],
         }}
       >
         {/* <Btn /> */}
         <div className="table-parent">
+          <div className="dropdown-options">
+          <div className="dropdown-block">
           <Dropdown menu={{ items }}>
             <Space>
               {index}
               <DownOutlined />
             </Space>
           </Dropdown>
+          </div>
+          <div className="dropdown-block">
           <Dropdown menu={{ items: expdates }}>
             <Space>
               {ep}
               <DownOutlined />
             </Space>
           </Dropdown>
+          </div>
+          </div>
           <div className="table-header">
             <div>
               <span>Calls</span>

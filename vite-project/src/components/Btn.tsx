@@ -40,7 +40,7 @@ const Btn = ({ symbol, expiryDate, optionType, strikePrice }: BtnProps) => {
       </Space>
       <Drawer
         closeIcon={false}
-        title={`${size} Market Chart`}
+        title={`Put Vs Call`}
         placement="right"
         size={size}
         onClose={onClose}
