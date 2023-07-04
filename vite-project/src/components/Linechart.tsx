@@ -57,7 +57,7 @@ export function Linechart({
       `http://localhost:4000/api/get/date?symbol=${symbol}&expiryDate=${expiryDate}&optionType=${optionType}&strikePrice=${strikePrice}`
     );
     const res = await response.json();
-    console.log(res.data, "lc");
+    // console.log(res.data, "lc");
   };
 
   const labels = [
