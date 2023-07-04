@@ -13,6 +13,20 @@ height:90vh;
 width:95vw;
 }
 
+.logo{
+  position:absolute;
+  z-index: 30;
+  width :5%;
+  left : 3%;
+}
+
+.bg{
+  position: absolute;
+  width: 120vw;
+  top: -90%;
+  left: -10%;
+}
+
 .table-parent {
   padding: 1%;
   display: flex;

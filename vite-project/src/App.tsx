@@ -13,6 +13,8 @@ import { implied_volatility } from './utils/test';
 import getDayDifference from './utils/ttm';
 import { ColumnsType } from 'antd/es/table';
 import Btn from './components/Btn';
+import optionlogo from "./assets/optionwiselogo.png"
+import bg from "./assets/bg.svg"
 
 function App() {
   // const [data, setData] = useState<DataType[]>([]);
@@ -672,6 +674,8 @@ function App() {
         }
       >
         {/* <Btn /> */}
+        <img src={optionlogo} alt="" className='logo'/>
+        <img src={bg} alt="" className='bg'/>
         <div className="data-table">
         <Datatable />
         </div>
