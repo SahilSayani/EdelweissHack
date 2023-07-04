@@ -190,7 +190,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: (
@@ -557,7 +557,7 @@ function App() {
           props: {
             style: {
               background:
-                stockLTP > record.strikePrice ? "#a5a5a5" : "transparent",
+                stockLTP > record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: (

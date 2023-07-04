@@ -22,6 +22,7 @@ const Btn = ({ symbol, expiryDate, optionType, strikePrice }: BtnProps) => {
 
   const onClose = () => {
     setOpen(false);
+    window.location.reload()
   };
 
   return (
@@ -47,9 +48,6 @@ const Btn = ({ symbol, expiryDate, optionType, strikePrice }: BtnProps) => {
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={onClose}>
-              OK
-            </Button>
           </Space>
         }
       >
