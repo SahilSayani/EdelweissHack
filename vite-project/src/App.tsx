@@ -677,10 +677,6 @@ function App() {
         {/* <Btn /> */}
         <img src={optionlogo} alt='' className='logo' />
         <img src={bg2} alt='' className='bg' />
-        <div className='sp-data'>
-          <div className='sp-data-box'> P1 = value</div>
-          <div className='sp-data-box'> P2 = value</div>
-        </div>
         <div className='data-table'>
           <Datatable />
         </div>

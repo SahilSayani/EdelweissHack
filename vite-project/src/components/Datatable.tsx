@@ -8,6 +8,7 @@ import { Line } from "react-chartjs-2";
 import { implied_volatility } from "../utils/test";
 import getDayDifference from "../utils/ttm";
 import { retinaScale } from "chart.js/helpers";
+import './../App.css'
 
 function Datatable() {
   const [data, setData] = useState<DataType[]>([]);
@@ -23,6 +24,8 @@ function Datatable() {
   const [expDateMap, setExpDateMap] = useState<any>([]);
   const [expDateArray, setExpDateArray] = useState<any>([]);
   const [expdates, setExpdates]= useState<any>([]);
+  const [stockName, setStockName]=useState<any>('');
+  const [stockPrice, setStockPrice]=useState<any>(0);
 
   let dataForTable;
 
@@ -61,7 +64,6 @@ function Datatable() {
   }
   // let strikePrice = 0;
   // let strikePriceArray: any = [];
-
   const handleGetData = async () => {
     setData([]);
     setLoading(true);
@@ -75,6 +77,8 @@ function Datatable() {
       }
       if(!val.strikePrice){
         setStockLTP(val.LTP);
+        setStockPrice(val.LTP);
+        setStockName(val.symbol);
       }
     });
     res.data= res.data.filter((val: any) => {
@@ -660,7 +664,12 @@ function Datatable() {
   ];
 
   return (
+    
     <>
+    <div className='sp-data'>
+          <div className='sp-data-box'>{stockName}</div>
+          <div className='sp-data-box'> {`₹${stockPrice/100}`}</div>
+        </div>
       <ConfigProvider
         theme={{
           algorithm: [theme.darkAlgorithm,theme.compactAlgorithm],
