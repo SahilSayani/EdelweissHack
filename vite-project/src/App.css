@@ -40,8 +40,8 @@ border-radius: px;
 }
 
 .table {
-  width: 90vw;
-  /* height: 90vh; */
+  width: 95vw;
+  height: 90vh;
   border-radius: 0 !important;
 }
 
