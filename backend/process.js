@@ -55,6 +55,7 @@ exports.filterData = (data) => {
         }
         obj["timestamp"] = date;
     }
+    console.log(result[0].timestamp);
     // const da = Array.from(uniqueSet);
     // var momentDate = moment(da[0], "ddd MMM DD HH:mm:ss z YYYY");
     // var isoString = momentDate.toISOString();

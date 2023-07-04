@@ -34,7 +34,10 @@ addAllDates = async (newDate) => {
     try {
         const data = await CurrentData.findById({ _id: "getDates" });
         newDate = newDate.split(" ");
-        var newData = [...data.allDates, `${newDate[1]} ${newDate[2]} ${newDate[3]}`];
+        var newData = [
+            ...data.allDates,
+            `${newDate[1]} ${newDate[2]} ${newDate[3]}`,
+        ];
         var newData = [...new Set(newData)];
         data.allDates = newData;
         await data.save();
@@ -56,18 +59,28 @@ deleteAllDates = async (oldDate) => {
 
 exports.getAllData = async (req, res) => {
     try {
-        const { symbol, expiryDate } = req.query;
+        const { symbol, expiryDate, strikePrice } = req.query;
         const { timestamp } = await getLatestTimeStamp();
         let data = await Data.find({
             symbol: symbol,
             timestamp: timestamp,
-        });
-        console.log(data.length);
-        if (expiryDate) {
+        }).sort({ strikePrice: 1 });
+        if (expiryDate && expiryDate != "default") {
+            console.log(expiryDate);
             data = data.filter((obj) => {
                 return obj.expiryDate == expiryDate;
             });
         }
+        if (strikePrice) {
+            data = data.filter((obj) => {
+                return obj.strikePrice == strikePrice;
+            });
+        }
+        data = data.filter((obj) => {
+            return obj.optionType !== "XX";
+        });
+        console.log(data.length);
+
         return res.status(200).json({
             status: "success",
             data,
@@ -104,7 +117,7 @@ exports.getByDate = async (req, res) => {
 
 exports.create = async (packetData) => {
     try {
-        console.log(packetData);
+        console.log(packetData[0]);
         await updateLatestTimeStamp({ timestamp: packetData[0].timestamp });
         await addAllDates(packetData[0].timestamp);
         //await Data.insertMany(packetData);

@@ -23,7 +23,7 @@ export default function getDayDifference(expiryDate: any) {
   const isoDateString = `${year}-${month}-${day}T${timeString}:00Z`;
   const date1 = new Date(isoDateString);
   const date2 = new Date(currentDate);
-  console.log(date1, date2);
+  //console.log(date1, date2);
   const dayStart = new Date(currentDate);
   dayStart.setUTCHours(9);
   dayStart.setUTCMinutes(15);

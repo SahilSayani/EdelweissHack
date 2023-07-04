@@ -79,11 +79,11 @@ function App() {
   //   }
 
   //   const res = await response.json();
-  //   console.log(res.data, "res.data.length");
+  //   //console.log(res.data, "res.data.length");
 
   //   res.data.map((item: any) => {
   //     // console.log(item.timestamp);
-  //     console.log(item.expiryDate);
+  //     //console.log(item.expiryDate);
   //   });
 
   //   res.data.map((item: any) => {
@@ -97,7 +97,7 @@ function App() {
   //   });
 
   //   let tempExpArray = [...new Set(expDateArray)];
-  //   console.log(tempExpArray, "tempExpArray");
+  //   //console.log(tempExpArray, "tempExpArray");
   //   const newTemp = tempExpArray.filter((item: any) => {
   //     return item !== undefined;
   //   });
@@ -140,8 +140,8 @@ function App() {
   //       )
   //       .map((item2: any) => {
   //         if (item2.strikePrice == null) {
-  //           console.log(item2, "item2");
-  //           console.log(item2.LTP / 100, "item.LTP");
+  //           //console.log(item2, "item2");
+  //           //console.log(item2.LTP / 100, "item.LTP");
   //           setStockLTP(item2.LTP / 100);
   //         }
   //         if (item2.strikePrice === item && item2.optionType === "CE") {
@@ -152,7 +152,7 @@ function App() {
   //             parseFloat(item2.LTP.toString()),
   //             item2.optionType
   //           );
-  //           console.log(iv, "iv");
+  //           //console.log(iv, "iv");
   //           dataObj = {
   //             key: Math.random(),
   //             symbol: item2.symbol,
@@ -175,7 +175,7 @@ function App() {
   //           };
   //         }
   //         if (item2.strikePrice === item && item2.optionType === "PE") {
-  //           console.log(stockLTP, "stockLTP");
+  //           //console.log(stockLTP, "stockLTP");
   //           const iv = implied_volatility(
   //             stockLTP,
   //             item2.strikePrice,
@@ -183,7 +183,7 @@ function App() {
   //             item2.LTP,
   //             item2.optionType
   //           );
-  //           console.log(iv, "iv");
+  //           //console.log(iv, "iv");
   //           dataObj = {
   //             ...dataObj,
   //             putExpireDate: item2.expiryDate,

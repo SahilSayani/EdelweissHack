@@ -9,15 +9,12 @@ const DB = process.env.DATABASE;
 const command = "java";
 const args = [
   "-Ddebug=true",
-  "-Dspeed=2",
   "-classpath",
   "./feed-play-1.0.jar",
   "hackathon.player.Main",
   "dataset.csv",
   "9014",
 ];
-
-
 
 mongoose
   .connect(DB, {

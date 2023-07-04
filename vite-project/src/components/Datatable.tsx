@@ -7,16 +7,21 @@ import { DownOutlined, LineChartOutlined } from "@ant-design/icons";
 import { Line } from "react-chartjs-2";
 import { implied_volatility } from "../utils/test";
 import getDayDifference from "../utils/ttm";
+import { retinaScale } from "chart.js/helpers";
 
 function Datatable() {
   const [data, setData] = useState<DataType[]>([]);
+  const [filteredData, setFilteredData] = useState<DataType[]>([]);
+  const [finalData, setFinalData] = useState<any>([]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [counter, setCounter] = useState<number>(0);
   const [stockLTP, setStockLTP] = useState<number>(0);
   const [index, setIndex] = useState<string>("MAINIDX");
-  const [ep, setEp] = useState<string>("ALL");
+  const [ep, setEp] = useState<string>("default");
   const [expDateMap, setExpDateMap] = useState<any>([]);
   const [expDateArray, setExpDateArray] = useState<any>([]);
+  const [expdates, setExpdates]= useState<MenuProps["items"]>([]);
 
   let dataForTable;
 
@@ -53,165 +58,145 @@ function Datatable() {
     putPrevClosePrice: number;
     putPrevOpenInterest: number;
   }
-
-  useEffect(() => {
-    handleGetData();
-  }, [index, ep, stockLTP]);
-
   let strikePrice = 0;
   let strikePriceArray: any = [];
 
   const handleGetData = async () => {
     setData([]);
     setLoading(true);
-    let response;
-    if (ep === "ALL") {
-      response = await fetch(`http://localhost:4000/api/get?symbol=${index}`);
-    } else {
-      response = await fetch(
-        `http://localhost:4000/api/get?symbol=${index}&expiryDate=${ep}`
-      );
-    }
+    const response = await fetch(`http://localhost:4000/api/get?symbol=${index}`);
     const res = await response.json();
-    console.log(res.data, "res.data.length");
-
-    res.data.map((item: any) => {
-      // console.log(item.timestamp);
-      console.log(item.expiryDate);
+    setData(res.data);
+    const tmpExpDate: Array<string>=[];
+    res.data.forEach((val: any)=>{
+      if(!tmpExpDate.includes(val.expiryDate) && val.expiryDate){
+        tmpExpDate.push(val.expiryDate);
+      }
+      if(!val.strikePrice){
+        setStockLTP(val.LTP);
+      }
     });
-
-    res.data.map((item: any) => {
-      strikePriceArray.push(item.strikePrice);
+    res.data= res.data.filter((val: any) => {
+      if (val.optionType !== "XX") {
+        return false;
+      }
+      return true;
     });
-
-    strikePriceArray = [...new Set(strikePriceArray)];
-
-    res.data.map((item: any) => {
-      expDateArray.push(item.expiryDate);
-    });
-
-    let tempExpArray = [...new Set(expDateArray)];
-    console.log(tempExpArray, "tempExpArray");
-    const newTemp = tempExpArray.filter((item: any) => {
-      return item !== undefined;
-    });
-
-    setExpDateArray(newTemp);
-
-    let tempExpMap: any = [];
-    newTemp.map((item: any) => {
-      let tempObj: any = {};
-      tempObj = {
-        label: item,
-        value: item,
-        onClick: () => {
-          setData([]);
-          setEp(item);
-        },
-      };
-      tempExpMap.push(tempObj);
-    });
-    setExpDateMap(tempExpMap);
-
-    // res.data
-    //   .sort(
-    //     (a: any, b: any) =>
-    //       parseFloat(a.strikePrice) - parseFloat(b.strikePrice)
-    //   )
-    //   // .filter((item: any) => item.symbol == "MAINIDX")
-    //   .map((item: any) => {
-    //     if (item.optionType === null) {
-    //       console.log(item.LTP / 100, "item.LTP");
-    //       setStockLTP(item.LTP / 100);
-    //     }
-    //   });
-
-    strikePriceArray.map((item: any) => {
-      let dataObj: any = {};
-      res.data
-        .sort(
-          (a: any, b: any) =>
-            parseFloat(a.strikePrice) - parseFloat(b.strikePrice)
-        )
-        .map((item2: any) => {
-          if (item2.strikePrice == null) {
-            console.log(item2, "item2");
-            console.log(item2.LTP / 100, "item.LTP");
-            setStockLTP(item2.LTP / 100);
-          }
-          if (item2.strikePrice === item && item2.optionType === "CE") {
-            const iv = implied_volatility(
-              parseFloat(stockLTP.toString()),
-              parseFloat(item2.strikePrice.toString()),
-              getDayDifference(item2.expiryDate),
-              parseFloat(item2.LTP.toString()),
-              item2.optionType
-            );
-            console.log(iv, "iv");
-            dataObj = {
-              key: Math.random(),
-              symbol: item2.symbol,
-              expiryDate: item2.expiryDate,
-              strikePrice: item2.strikePrice,
-              optionType: item2.optionType,
-              LTP: item2.LTP,
-              LTQ: item2.LTQ,
-              totalTradedVolume: item2.totalTradedVolume,
-              bestBid: item2.bestBid,
-              bestAsk: item2.bestAsk,
-              bestBidQty: item2.bestBidQty,
-              bestAskQty: item2.bestAskQty,
-              openInterest: item2.openInterest,
-              timestamp: item2.timestamp,
-              sequence: item2.sequence,
-              prevClosePrice: item2.prevClosePrice,
-              prevOpenInterest: item2.prevOpenInterest,
-              iv: iv,
-            };
-          }
-          if (item2.strikePrice === item && item2.optionType === "PE") {
-            console.log(stockLTP, "stockLTP");
-            const iv = implied_volatility(
-              stockLTP,
-              item2.strikePrice,
-              getDayDifference(item2.expiryDate),
-              item2.LTP,
-              item2.optionType
-            );
-            console.log(iv, "iv");
-            dataObj = {
-              ...dataObj,
-              putExpireDate: item2.expiryDate,
-              strikePrice: item2.strikePrice,
-              putLTP: item2.LTP,
-              putLTQ: item2.LTQ,
-              putTotalTradedVolume: item2.totalTradedVolume,
-              putBestBid: item2.bestBid,
-              putBestAsk: item2.bestAsk,
-              putBestBidQty: item2.bestBidQty,
-              putBestAskQty: item2.bestAskQty,
-              putOpenInterest: item2.openInterest,
-              putTimestamp: item2.timestamp,
-              putSequence: item2.sequence,
-              putPrevClosePrice: item2.prevClosePrice,
-              putPrevOpenInterest: item2.prevOpenInterest,
-              iv: iv,
-            };
-            data.push(dataObj);
-          }
-        });
-      data.push(dataObj);
-    });
-    setData(data);
+    res.data.shift();
+    console.log(res.data);
+    console.log(tmpExpDate.length);
+    setExpDateMap(tmpExpDate);
     setLoading(false);
   };
+  useEffect(()=>{
+    console.log(stockLTP, 'testLTP');
+  },[stockLTP])
+  useEffect(() => {
+    const arr = data.filter((val)=>{
+      if(val.expiryDate==ep){
+        return val;
+      }
+    })
+    console.log(arr);
+    setFilteredData(arr);
+    setData(arr);
+    }, [ep]);
 
   useEffect(() => {
-    dataForTable = data;
-    setData(dataForTable);
-  }, [counter, index, ep]);
+    handleGetData();
+    setEp('default');
+  }, [index]);
 
-  useEffect(() => {}, [data, index, ep]);
+  useEffect(()=>{
+    let prevST=-1;
+    let rowObj ={};
+    const rows=[];
+    data.forEach(val=>{
+      if(val.strikePrice!=prevST && Object.keys(rowObj).length){
+          rows.push(rowObj);
+          rowObj={};
+          prevST=val.strikePrice;
+      }
+      if(val.optionType=='PE'){
+        rowObj={
+          ...rowObj,
+          key: Math.random(),
+          strikePrice: val.strikePrice,
+          putExpireDate: val.expiryDate,
+          putLTP: val.LTP,
+          putLTQ: val.LTQ,
+          putTotalTradedVolume: val.totalTradedVolume,
+          putBestBid: val.bestBid,
+          putBestAsk: val.bestAsk,
+          putBestBidQty: val.bestBidQty,
+          putBestAskQty: val.bestAskQty,
+          putOpenInterest: val.openInterest,
+          putTimestamp: val.timestamp,
+          putSequence: val.sequence,
+          putPrevClosePrice: val.prevClosePrice,
+          putPrevOpenInterest: val.prevOpenInterest,
+        }
+      }
+      else if(val.optionType=='CE'){
+        rowObj={
+            ...rowObj,
+            key: Math.random(),
+            symbol: val.symbol,
+            expiryDate: val.expiryDate,
+            strikePrice: val.strikePrice,
+            optionType: val.optionType,
+            LTP: val.LTP,
+            LTQ: val.LTQ,
+            totalTradedVolume: val.totalTradedVolume,
+            bestBid: val.bestBid,
+            bestAsk: val.bestAsk,
+            bestBidQty: val.bestBidQty,
+            bestAskQty: val.bestAskQty,
+            openInterest: val.openInterest,
+            timestamp: val.timestamp,
+            sequence: val.sequence,
+            prevClosePrice: val.prevClosePrice,
+            prevOpenInterest: val.prevOpenInterest,
+        }
+      }
+    });
+    if(Object.keys(rowObj).length){
+          rows.push(rowObj);
+          rowObj={};
+      }
+      console.log(rows);
+      setFinalData([...rows])
+  },[filteredData])
+
+  useEffect(()=>{
+    console.log(data, finalData, 'this');
+  },[finalData])
+  //setInterval(handleGetData, 5000);
+
+  useEffect(()=>{
+    console.log(expDateMap, 'expmp');
+  },[expDateMap]);
+
+  useEffect(()=>{
+    console.log(stockLTP);
+  },[stockLTP])
+
+  
+  useEffect(()=>{
+    if (expDateMap && expDateMap.length) {
+      const newExpdates = [
+        ...expDateMap,
+      ];
+      setExpdates(newExpdates);
+    }
+  },[expDateMap])
+
+  useEffect(()=>{
+    console.log(index, expdates);
+    if(expdates && expdates.length){
+      setEp(expdates[0]);
+    }
+  },[expdates]);
 
   const callColumns: ColumnsType<DataType> = [
     {
@@ -301,6 +286,23 @@ function Datatable() {
             style: {
               background:
                 stockLTP > record.strikePrice ? "#202838" : "transparent",
+            },
+          },
+          children: <>{text}</>,
+        };
+      },
+    },
+    {
+      title: "CHNG",
+      dataIndex: "chng",
+      key: "chng",
+      align: "center",
+      render(text, record) {
+        return {
+          props: {
+            style: {
+              background:
+                stockLTP < record.strikePrice ? "#202838" : "transparent",
             },
           },
           children: <>{text}</>,
@@ -483,7 +485,7 @@ function Datatable() {
     {
       title: "CHNG",
       dataIndex: "chng",
-      key: "chng",
+      key: "putChng",
       align: "center",
       render(text, record) {
         return {
@@ -642,19 +644,6 @@ function Datatable() {
     },
   ];
 
-  const expdates: MenuProps["items"] = [
-    // ...[
-    //   {
-    //     label: "ALL",
-    //     key: 0,
-    //     onClick: () => {
-    //       setEp("ALL");
-    //     },
-    //   },
-    // ],
-    ...expDateMap,
-  ];
-
   return (
     <>
       <ConfigProvider
@@ -694,10 +683,10 @@ function Datatable() {
             <Table
               columns={callColumns}
               loading={loading}
-              dataSource={[...data]}
+              dataSource={[...finalData]}
               className="table"
               scroll={{ x: 1500, y: 500 }}
-              // pagination={false}
+              pagination={false}
             />
           </div>
         </div>
