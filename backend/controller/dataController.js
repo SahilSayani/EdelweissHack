@@ -94,7 +94,7 @@ exports.getByDate = async (req, res) => {
     try {
         const { symbol, expiryDate, strikePrice, optionType } = req.query;
         const { timestamp } = await getLatestTimeStamp();
-        const searchString = timestamp;
+        const searchString = timestamp.slice(0, 10);
         let data = await Data.find({
             symbol: symbol,
             expiryDate: expiryDate,
@@ -102,7 +102,7 @@ exports.getByDate = async (req, res) => {
             optionType: optionType,
             timestamp: { $regex: new RegExp(searchString) },
         });
-        console.log(searchString);
+        console.log(searchString, 'strr');
         return res.status(200).json({
             status: "success",
             data,

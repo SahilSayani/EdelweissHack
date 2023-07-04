@@ -72,7 +72,7 @@ export function Linechart({
     const arr2: any=[]; 
     res.data.map((val: any)=>{
       arr.push(val.LTP);
-      arr2.push(val.timestamp.slice(4, 10));
+      arr2.push(val.timestamp.slice(10, 19));
     })
     res1.data.map((val: any)=>{
       arr1.push(val.LTP);
@@ -88,14 +88,14 @@ export function Linechart({
     labels,
     datasets: [
       {
-        label: "Dataset 1",
+        label: "Put LTP",
         data: ltp,
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
         tension: 0.2,
       },
       {
-        label: "Dataset 2",
+        label: "Call LTP",
         data: callLtp,
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
