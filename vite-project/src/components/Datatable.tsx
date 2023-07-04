@@ -371,6 +371,7 @@ function Datatable() {
               style: {
                 background:
                   stockLTP > record.strikePrice ? "transparent" : "transparent",
+                color:"white",  
               },
             },
             children: <>{text}</>,
