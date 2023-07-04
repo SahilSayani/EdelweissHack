@@ -1,5 +1,5 @@
 *{
-  font-size: small;
+  /* font-size: small; */
 }
 
 .data-table{
@@ -12,7 +12,19 @@ backdrop-filter: blur( 5px );
 height:90vh;
 width:95vw;
 }
-
+.sp-data{
+  position:absolute;
+  z-index: 30;
+  width :5%;
+  left : 10%;
+  display:flex;
+  font-weight: bold;
+  font-family: "arial";
+  padding:1%;
+}
+.sp-data-box{
+  margin:0 6% 0 6%;
+}
 .logo{
   position:absolute;
   z-index: 30;
